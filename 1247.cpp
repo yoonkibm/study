@@ -36,7 +36,7 @@ int main(){
                 buho = '+';
                 break;
             }
-            else if(pos.empty() && ans =< 0){
+            else if(pos.empty() && ans <= 0){
                 buho = '-';
                 break;
             }
