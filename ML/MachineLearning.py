@@ -52,27 +52,27 @@ class LogisticRegression:
         X: (N, d)
         Y: (N, k)
         '''
-        N, d = X.shape
-        K = Y.shape[1]
-        self.num_classes = K
+        n, d = X.shape
+        k = Y.shape[1]
+        self.num_classes = k
 
-        X_ = np.hstack([np.ones((N, 1)), X])
+        x_ = np.hstack([np.ones((n, 1)), X])
         d_plus_1 = d + 1
 
-        self.w = np.zeros((d_plus_1, K))
+        self.w = np.zeros((d_plus_1, k))
         
         for i in range(max_iter):
-            Z = X_.dot(self.w)
+            z = x_.dot(self.w)
 
-            expZ = np.exp(Z)
+            exp_z = np.exp(z)
 
-            sumExpZ = np.sum(expZ, axis=1, keepdims=True)
+            sum_exp_z = np.sum(exp_z, axis=1, keepdims=True)
 
-            Y_pred = expZ / sumExpZ
+            Y_pred = exp_z / sum_exp_z
 
             loss = -np.mean(np.sum(Y * np.log(Y_pred + 1e-9), axis=1))
 
-            grad = (1.0 / N) * X_.T.dot(Y_pred - Y)
+            grad = (1.0 / n) * x_.T.dot(Y_pred - Y)
 
             self.w -= lr*grad
 
@@ -84,21 +84,21 @@ class LogisticRegression:
         if X.ndim == 1:
             X = X.reshape(1, -1)
 
-        N = X.shape[0]
-        X_ = np.hstack([np.ones((N, 1)), X])
-        Z = X_.dot(self.w)
-        expZ = np.exp(Z)
-        sumExpZ = np.sum(expZ, axis=1, keepdims=True)
-        prob = expZ / sumExpZ
+        n = X.shape[0]
+        x_ = np.hstack([np.ones((n, 1)), X])
+        z = x_.dot(self.w)
+        exp_z = np.exp(z)
+        sum_exp_z = np.sum(exp_z, axis=1, keepdims=True)
+        prob = exp_z / sum_exp_z
         return np.argmax(prob, axis=1)
 
     def test(self, X, Y):
-        N = X.shape[0]
-        X_ = np.hstack([np.ones((N, 1)), X])
-        Z = X_.dot(self.w)
-        expZ = np.exp(Z)
-        sumExpZ = np.sum(expZ, axis=1, keepdims=True)
-        Y_pred = expZ / sumExpZ
+        n = X.shape[0]
+        x_ = np.hstack([np.ones((n, 1)), X])
+        z = x_.dot(self.w)
+        exp_z = np.exp(z)
+        sum_exp_z = np.sum(exp_z, axis=1, keepdims=True)
+        Y_pred = exp_z / sum_exp_z
         loss = -np.mean(np.sum(Y * np.log(Y_pred + 1e-9), axis=1))
         print("Cross entropy:{}".format(loss))
 
@@ -114,3 +114,9 @@ def one_hot_encoding(y, num_classes=None):
     labels[np.arange(y.shape[0]), y] = 1
     
     return labels
+
+def accuracy(Y, Y_pred):
+    count_matches = np.count_nonzero(Y == Y_pred)
+
+    accuracy = (count_matches / len(Y))*100
+    print("Accuracy: {:.2f}".format(accuracy))
