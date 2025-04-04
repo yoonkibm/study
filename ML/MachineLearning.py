@@ -45,33 +45,72 @@ class LogisticRegression:
     def __init__(self):
         super().__init__()
         self.w = None
+        self.num_classes = None
 
-    def fit(self, X, y, max_iter=50, lr=0.001):
-        X = np.hstack([np.ones((X.shape[0], 1)), X])
+    def fit(self, X, Y, max_iter=50, lr=0.01):
+        '''
+        X: (N, d)
+        Y: (N, k)
+        '''
+        N, d = X.shape
+        K = Y.shape[1]
+        self.num_classes = K
 
-        self.w = np.zeros(X.shape[1])
-        m = len(y)
+        X_ = np.hstack([np.ones((N, 1)), X])
+        d_plus_1 = d + 1
+
+        self.w = np.zeros((d_plus_1, K))
+        
         for i in range(max_iter):
-            z = X.dot(self.w)
-            y_pred = 1/(1+np.exp(-z))
+            Z = X_.dot(self.w)
 
-            grad = (1/m)*(X.T.dot(y_pred - y))
+            expZ = np.exp(Z)
+
+            sumExpZ = np.sum(expZ, axis=1, keepdims=True)
+
+            Y_pred = expZ / sumExpZ
+
+            loss = -np.mean(np.sum(Y * np.log(Y_pred + 1e-9), axis=1))
+
+            grad = (1.0 / N) * X_.T.dot(Y_pred - Y)
 
             self.w -= lr*grad
 
             if i % 10 == 0:
-                ce = np.mean(-1*(y*np.log(y_pred + 1e-9)+(1-y)*np.log(1-y_pred + 1e-9)))
-                print("epoch: {}/{}\tbinary cross entropy:{}".format(i, max_iter, ce))
+                print("epoch: {}/{}\tCross entropy:{}".format(i, max_iter, loss))
 
     def predict(self, X):
-        if X.ndim == 1:
-            X = X[np.newaxis, :]  # 혹은 X.reshape(1, -1)
-        X = np.hstack([np.ones((X.shape[0], 1)), X])
-        prob = 1/(1+np.exp(-1*X.dot(self.w)))
-        return (prob >= 0.5).astype(int)
 
-    def test(self, X, y):
-        X = np.hstack([np.ones((X.shape[0], 1)), X])
-        y_pred = 1/(1+np.exp(-1*X.dot(self.w)))
-        ce = np.mean(-1*(y*np.log(y_pred)+(1-y)*np.log(1-y_pred)))
-        print("Binary cross entropy:{}".format(ce))
+        if X.ndim == 1:
+            X = X.reshape(1, -1)
+
+        N = X.shape[0]
+        X_ = np.hstack([np.ones((N, 1)), X])
+        Z = X_.dot(self.w)
+        expZ = np.exp(Z)
+        sumExpZ = np.sum(expZ, axis=1, keepdims=True)
+        prob = expZ / sumExpZ
+        return np.argmax(prob, axis=1)
+
+    def test(self, X, Y):
+        N = X.shape[0]
+        X_ = np.hstack([np.ones((N, 1)), X])
+        Z = X_.dot(self.w)
+        expZ = np.exp(Z)
+        sumExpZ = np.sum(expZ, axis=1, keepdims=True)
+        Y_pred = expZ / sumExpZ
+        loss = -np.mean(np.sum(Y * np.log(Y_pred + 1e-9), axis=1))
+        print("Cross entropy:{}".format(loss))
+
+def one_hot_encoding(y, num_classes=None):
+
+    y = np.array(y)
+
+    if num_classes == None:
+        num_classes = y.max() + 1
+
+    labels = np.zeros((y.shape[0], num_classes))
+
+    labels[np.arange(y.shape[0]), y] = 1
+    
+    return labels
