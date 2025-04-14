@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "cppbuild",
+        "label": "C/C++: g++.exe build OpenCV file",
+        "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+        "args": [
+          "-fdiagnostics-color=always",
+          "-g",
+          "${file}",
+          "-o",
+          "${fileDirname}\\${fileBasenameNoExtension}.exe",
+  
+          // include path for OpenCV
+          "-I", "C:/opencv-mingw/include",
+  
+          // library path
+          "-L", "C:/opencv-mingw/x64/mingw/lib",
+  
+          // libraries to link (예시: opencv_world 사용 시 하나만 써도 됨)
+          "-lopencv_world4110",
+          "-mconsole"
+        ],
+        "options": {
+          "cwd": "${fileDirname}"
+        },
+        "problemMatcher": [
+          "$gcc"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "detail": "Build task using MinGW-w64 and OpenCV"
+      }
+    ]
+  }
