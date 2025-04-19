@@ -114,26 +114,51 @@ class NearestNeighborClassification:
 
     def predict(self, X_test, k = 3):
         X_train_squared = np.sum(self.X**2, axis=1)
-        X_test_sqaured = np.sum(X_test**2, axis=1)
+        X_test_squared = np.sum(X_test**2, axis=1)
         cross = X_test @ self.X.T
 
-        dists = np.sqrt(X_test_sqaured[:, None] + X_train_squared[None, :] - 2*cross)
+        dists = np.sqrt(X_test_squared[:, None] + X_train_squared[None, :] - 2*cross)
 
         knn_indices = np.argpartition(dists, kth = k, axis = 1)[:, :k]
 
         knn_labels = self.Y[knn_indices]
 
-        result = []
+        preds = []
         for row in knn_labels:
             vals, counts = np.unique(row, return_counts=True)
-            result.append(vals[np.argmax(counts)])
+            preds.append(vals[np.argmax(counts)])
         
-        return np.array(result)
+        return np.preds(result)
+    
+class NearestNeighborRegression:
+    def __init__(self):
+        super().__init__()
+        self.X = None
+        self.Y = None
 
+    def fit(self, args_x, args_y):
+        self.X = args_x
+        self.Y = args_y
 
+    def predict(self, X_test, k = 3):
 
-
+        if k <= 0 or k > self.X.shape[0]:
+            raise ValueError("k must be between 1 and the number of training samples")
         
+        X_train_squared = np.sum(self.X**2, axis=1)
+        X_test_squared = np.sum(X_test**2, axis=1)
+        cross = X_test @ self.X.T
+
+        dists = np.sqrt(X_test_squared[:, None] + X_train_squared[None, :] - 2*cross)
+
+        knn_indices = np.argpartition(dists, kth = k, axis = 1)[:, :k]
+
+        knn_values = self.Y[knn_indices]
+        preds = np.mean(knn_values, axis=1)
+        
+        return preds
+
+ 
 def one_hot_encoding(y, num_classes=None):
 
     y = np.array(y)
