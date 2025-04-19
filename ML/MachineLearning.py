@@ -102,6 +102,38 @@ class LogisticRegression:
         loss = -np.mean(np.sum(Y * np.log(Y_pred + 1e-9), axis=1))
         print("Cross entropy:{}".format(loss))
 
+class NearestNeighborClassification:
+    def __init__(self):
+        super().__init__()
+        self.X = None
+        self.Y = None
+
+    def fit(self, args_x, args_y):
+        self.X = args_x
+        self.Y = args_y
+
+    def predict(self, X_test, k = 3):
+        X_train_squared = np.sum(self.X**2, axis=1)
+        X_test_sqaured = np.sum(X_test**2, axis=1)
+        cross = X_test @ self.X.T
+
+        dists = np.sqrt(X_test_sqaured[:, None] + X_train_squared[None, :] - 2*cross)
+
+        knn_indices = np.argpartition(dists, kth = k, axis = 1)[:, :k]
+
+        knn_labels = self.Y[knn_indices]
+
+        result = []
+        for row in knn_labels:
+            vals, counts = np.unique(row, return_counts=True)
+            result.append(vals[np.argmax(counts)])
+        
+        return np.array(result)
+
+
+
+
+        
 def one_hot_encoding(y, num_classes=None):
 
     y = np.array(y)
