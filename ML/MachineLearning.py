@@ -128,7 +128,7 @@ class NearestNeighborClassification:
             vals, counts = np.unique(row, return_counts=True)
             preds.append(vals[np.argmax(counts)])
         
-        return np.preds(result)
+        return np.preds(preds)
     
 class NearestNeighborRegression:
     def __init__(self):
@@ -157,6 +157,44 @@ class NearestNeighborRegression:
         preds = np.mean(knn_values, axis=1)
         
         return preds
+    
+class GaussianNBClassification:
+    def __init__(self):
+        super().__init__()
+        self.classes = None
+        self.class_means = {}
+        self.class_vars = {}
+        self.class_priors = {}
+
+    def fit(self, X, Y):
+
+        self.classes = np.unique(Y)
+
+        for class_ in self.classes:
+            class_data = X[Y == class_]
+            self.class_means[class_] = class_data.mean(axis = 0)
+            self.class_vars[class_] = np.where(class_data.var(axis = 0) == 0, 1e-9, class_data.var(axis = 0, ddof=0))
+            self.class_priors[class_] = len(class_data)/len(X)
+    
+    def predict(self, X_test):
+
+        proba = []
+
+        for class_ in self.classes:
+            mean = self.class_means[class_]
+            var = self.class_vars[class_]
+
+            log_prior = np.log(self.class_priors[class_])
+
+            log_posterior = -0.5 * np.log(2 * np.pi * var) - ((X_test - mean)**2)/(2*var)
+            log_prob = log_prior + np.sum(log_posterior, axis=1)
+
+            proba.append(log_prob)
+
+        proba = np.array(proba).T
+        return np.argmax(proba, axis=1)
+        
+
 
  
 def one_hot_encoding(y, num_classes=None):
