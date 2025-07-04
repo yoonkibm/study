@@ -1,4 +1,5 @@
 import numpy as np
+import string
 
 class LinearRegression:
     def __init__(self):
@@ -193,6 +194,10 @@ class GaussianNBClassification:
 
         proba = np.array(proba).T
         return np.argmax(proba, axis=1)
+    
+class MultinomialNBClassification:
+    def __init__(self):
+        self.classes = None
         
 
 
@@ -215,3 +220,8 @@ def accuracy(Y, Y_pred):
 
     accuracy = (count_matches / len(Y))*100
     print("Accuracy: {:.2f}".format(accuracy))
+
+def text_to_word(text):
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    words = text.split()
+    return words
