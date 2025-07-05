@@ -1,0 +1,30 @@
+
+Train start time: 2025-07-05 11:32:23
+
+Epoch losses: [2.3026]
+
+
+Train start time: 2025-07-05 11:34:10
+
+Epoch losses: [2.3026]
+
+Test Accuracy: 10.00%
+
+Train start time: 2025-07-05 11:47:16
+
+Epoch losses: [2.3026, 2.3026, 2.3025, 2.3025, 2.3025, 2.3024, 2.3024, 2.3024, 2.3023, 2.3023]
+
+Test Accuracy: 16.29%
+
+Train start time: 2025-07-05 12:44:47
+
+Epoch losses: [2.2965, 2.2140, 2.0654, 1.9661, 1.8578, 1.7649, 1.7031, 1.6351, 1.5860, 1.5457]
+
+Test Accuracy: 39.87% (Adding weight initialization)
+
+
+Train start time: 2025-07-05 13:19:39
+
+Epoch losses: [2.2844, 2.1363, 2.0038, 1.8844, 1.7888, 1.7158, 1.6585, 1.6068, 1.5659, 1.5275]
+
+Test Accuracy: 45.59%(Adding weight decay)
