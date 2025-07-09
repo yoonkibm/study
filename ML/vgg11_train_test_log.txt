@@ -11,3 +11,10 @@ Model:VGG_11
 Epoch losses: [2.0038, 1.6455, 1.4424, 1.3204, 1.2008, 1.0999, 0.9995, 0.9253, 0.8502, 0.7902]
 
 Test Accuracy: 73.41%
+
+Train start time: 2025-07-09 19:25:40
+
+Model:GoogleNet
+Epoch losses: [nan, nan, nan, nan, nan, nan, nan, nan, nan, nan]
+
+Test Accuracy: 10.00%

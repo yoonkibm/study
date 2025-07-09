@@ -12,7 +12,7 @@ torch.multiprocessing.freeze_support()
 
 if __name__ == "__main__":
     # model selection code
-    model = ConvNet.VGG_13(10)
+    model = ConvNet.GoogleNet(10)
 
     for m in model.modules():
         if isinstance(m, nn.Conv2d):
