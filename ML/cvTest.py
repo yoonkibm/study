@@ -11,8 +11,14 @@ import ConvNet
 torch.multiprocessing.freeze_support()
 
 if __name__ == "__main__":
-    # model selection code
-    model = ConvNet.GoogleNet(10)
+    # Set parameters
+    model = ConvNet.AlexNet(10)
+    epochs = 10
+    batch_size = 64
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.001, weight_decay=0.0005, momentum=0.9)
+    log_path = "alexnet_train_test_log.txt"
+    resize_value = 227 #alexnet need 227x227 input size, other models need 224x224
 
     for m in model.modules():
         if isinstance(m, nn.Conv2d):
@@ -24,25 +30,26 @@ if __name__ == "__main__":
             nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu')
             if m.bias is not None:
                 nn.init.zeros_(m.bias)
+        elif isinstance(m, nn.BatchNorm2d):
+            nn.init.ones_(m.weight)
+            nn.init.zeros_(m.bias)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     model.to(device)
 
     transform = transforms.Compose([
-    transforms.Resize(224),
+    transforms.Resize(resize_value),
     transforms.ToTensor()
     ])
 
-    epochs = 10
-    batch_size = 64
+    
     trainset = CIFAR10(root='./data', train=True, download=True, transform=transform)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
     testset = CIFAR10(root='./data', train=False, download=True, transform=transform)
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
 
-    criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.001, weight_decay=0.0005, momentum=0.9)
+    
     # VGG paper uses SGD with momentum 0.9 and weight decay 0.0005
 
     print(f"Training {model.__class__.__name__} on CIFAR-10...")
@@ -81,7 +88,7 @@ if __name__ == "__main__":
     print(f"Test Accuracy: {accuracy:.2f}%")
 
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    log_path = "vgg11_train_test_log.txt"
+    
     with open(log_path, "a") as f:
         f.write(f"\nTrain start time: {now}\n\n")  # 앞에 \n 붙여서 이전 로그와 줄바꿈
         f.write(f"Model:{model.__class__.__name__}\n")

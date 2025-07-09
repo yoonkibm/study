@@ -56,16 +56,25 @@ class AlexNet(torch.nn.Module):
         super().__init__()
         self.encoder = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=96, kernel_size=11, stride=4), # output size: 96, 55, 55
+            nn.BatchNorm2d(96), # customized for AlexNet
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2), #output size: 96, 27, 27
+
             nn.Conv2d(in_channels=96, out_channels=256, kernel_size=5, padding=2), #output size: 256, 27, 27
+            nn.BatchNorm2d(256), # customized for AlexNet
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2), #output size: 256, 13, 13
+
             nn.Conv2d(in_channels=256, out_channels=384, kernel_size=3, padding=1), #output size: 384, 13, 13
+            nn.BatchNorm2d(384), # customized for AlexNet
             nn.ReLU(inplace=True),
+
             nn.Conv2d(in_channels=384, out_channels=384, kernel_size=3, padding=1), #output size: 384, 13, 13
+            nn.BatchNorm2d(384), # customized for AlexNet
             nn.ReLU(inplace=True),
+
             nn.Conv2d(in_channels=384, out_channels=256, kernel_size=3, padding=1), #output size: 256, 13, 13
+            nn.BatchNorm2d(256), # customized for AlexNet
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2)  # output size:256, 6, 6
         )
