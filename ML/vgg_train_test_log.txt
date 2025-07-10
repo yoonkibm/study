@@ -14,3 +14,10 @@ Test Accuracy: 73.41%
 
 Train start time: 2025-07-09 19:25:40
 
+
+Train start time: 2025-07-10 17:07:21
+
+Model:VGG_11
+Epoch losses: [1.8625, 1.4102, 1.2640, 1.1464, 1.0496, 0.9614, 0.8933, 0.8230, 0.7629, 0.7132]
+
+Test Accuracy: 75.73%

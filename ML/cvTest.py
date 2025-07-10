@@ -17,7 +17,7 @@ if __name__ == "__main__":
     batch_size = 64
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.001, weight_decay=0.0005, momentum=0.9)
-    log_path = "alexnet_train_test_log.txt"
+    log_path = "vgg_train_test_log.txt"
     resize_value = 227 #alexnet need 227x227 input size, other models need 224x224
 
     for m in model.modules():
