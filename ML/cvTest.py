@@ -12,13 +12,13 @@ torch.multiprocessing.freeze_support()
 
 if __name__ == "__main__":
     # Set parameters
-    model = ConvNet.AlexNet(10)
+    model = ConvNet.ResNet18(10)
     epochs = 10
     batch_size = 64
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.001, weight_decay=0.0005, momentum=0.9)
-    log_path = "vgg_train_test_log.txt"
-    resize_value = 227 #alexnet need 227x227 input size, other models need 224x224
+    log_path = "resnet_train_test_log.txt"
+    resize_value = 224 #alexnet need 227x227 input size, other models need 224x224
 
     for m in model.modules():
         if isinstance(m, nn.Conv2d):

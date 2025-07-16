@@ -1,0 +1,21 @@
+
+Train start time: 2025-07-16 14:28:41
+
+Model:GoogleNet
+Epoch losses: [2.9021]
+
+Test Accuracy: 10.00%
+
+Train start time: 2025-07-16 14:51:59
+
+Model:GoogleNet
+Epoch losses: [2.5957, 2.3036, 2.3031, 2.3030, 2.3029, 2.3029, 2.3028, 2.2867, 1.9828, 1.7921]
+
+Test Accuracy: 38.57%
+
+Train start time: 2025-07-16 15:12:27
+
+Model:GoogleNet
+Epoch losses: [2.3421, 1.6389, 1.4847, 1.3724, 1.2843, 1.1973, 1.1158, 1.0499, 0.9809, 0.9314]
+
+Test Accuracy: 64.49%
